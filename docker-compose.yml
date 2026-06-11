@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: laravel_web
+    ports:
+      - "80:80"
+    volumes:
+      - ./projects:/var/www/html
+    depends_on:
+      - db
+      - redis
+      - meilisearch
+    environment:
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: laravel_db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: laravel_user
+      POSTGRES_PASSWORD: laravel_password
+      POSTGRES_DB: laravel_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # --- НОВЫЕ СЕРВИСЫ ---
+
+  redis:
+    image: redis:alpine
+    container_name: laravel_redis
+    ports:
+      - "6379:6379"
+    #environment:
+      #REDIS_PASSWORD: redis_password  
+      #REDIS_USER: redis_user     
+      #REDIS_USER_PASSWORD: redis_user_password
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: laravel_meilisearch
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: "your_master_key_here" # Ключ для доступа к Meilisearch
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - meilisearch_data:/meili_data
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: laravel_mailpit
+    ports:
+      - "1025:1025" # SMTP порт (сюда Laravel отправляет письма)
+      - "8025:8025" # Web UI порт (здесь вы читаете письма)
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  meilisearch_data:
