@@ -34,6 +34,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+    RUN apt-get update && apt-get install -y npm
+
 # 4. Включение модулей Apache
 RUN a2enmod rewrite && a2enmod headers
 
@@ -46,3 +48,5 @@ WORKDIR /var/www/html
 
 # 7. Точка входа
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+
