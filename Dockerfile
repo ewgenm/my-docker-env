@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     git \
+    postgresql-client \
     && curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" > /etc/apt/sources.list.d/php.list
 
@@ -34,6 +35,7 @@ RUN apt-get update && apt-get install -y \
     php8.3-bcmath \
     php8.3-intl \
     composer \
+    iputils-ping \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
