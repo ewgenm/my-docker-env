@@ -1,4 +1,4 @@
-Клонируем \n
+Клонируем \r\n
   git clone https://github.com/ewgenm/my-docker-env.git
 переходим в папку
   cd my-docker-env
